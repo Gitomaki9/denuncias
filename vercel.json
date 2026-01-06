@@ -1,59 +1,58 @@
 {
   "trailingSlash": false,
   "cleanUrls": true,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/assets/([^/]+\\.(svg|png|jpg|jpeg|gif))",
-      "dest": "/assets/$1"
+      "source": "/assets/([^/]+\.(svg|png|jpg|jpeg|gif))",
+      "destination": "/assets/$1"
     },
     {
-      "src": "/assets/images/(.*)",
-      "dest": "/assets/images/$1"
+      "source": "/assets/images/(.*)",
+      "destination": "/assets/images/$1"
     },
     {
-      "src": "/css/(.*)",
-      "dest": "/css/$1"
+      "source": "/css/(.*)",
+      "destination": "/css/$1"
     },
     {
-      "src": "/js/(.*)",
-      "dest": "/js/$1"
+      "source": "/js/(.*)",
+      "destination": "/js/$1"
     },
     {
-      "src": "/",
-      "dest": "/html/index.html"
+      "source": "/",
+      "destination": "/html/index.html"
     },
     {
-      "src": "/login",
-      "dest": "/html/login.html"
+      "source": "/login",
+      "destination": "/html/login.html"
     },
     {
-      "src": "/registro",
-      "dest": "/html/registro.html"
+      "source": "/registro",
+      "destination": "/html/registro.html"
     },
     {
-      "src": "/contactanos",
-      "dest": "/html/contactanos.html"
+      "source": "/contactanos",
+      "destination": "/html/contactanos.html"
     },
     {
-      "src": "/normativa",
-      "dest": "/html/normativa.html"
+      "source": "/normativa",
+      "destination": "/html/normativa.html"
     },
     {
-      "src": "/perfil",
-      "dest": "/html/perfil.html"
+      "source": "/perfil",
+      "destination": "/html/perfil.html"
     },
     {
-      "src": "/denuncias",
-      "dest": "/html/denuncias.html"
+      "source": "/denuncias",
+      "destination": "/html/denuncias.html"
     },
     {
-      "src": "/crear_denuncia",
-      "dest": "/html/crear_denuncia.html"
+      "source": "/crear_denuncia",
+      "destination": "/html/crear_denuncia.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/html/$1.html",
-      "status": 200
+      "source": "/(.*)",
+      "destination": "/html/$1.html"
     }
   ]
 }
