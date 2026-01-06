@@ -2,17 +2,14 @@
   "trailingSlash": false,
   "cleanUrls": true,
   "routes": [
-    // Servir imágenes directamente en assets/
     {
-      "src": "/assets/([^/]+\.(svg|png|jpg|jpeg|gif))",
+      "src": "/assets/([^/]+\\.(svg|png|jpg|jpeg|gif))",
       "dest": "/assets/$1"
     },
-    // Servir imágenes en assets/images/
     {
       "src": "/assets/images/(.*)",
       "dest": "/assets/images/$1"
     },
-    // Servir CSS y JS
     {
       "src": "/css/(.*)",
       "dest": "/css/$1"
@@ -21,7 +18,6 @@
       "src": "/js/(.*)",
       "dest": "/js/$1"
     },
-    // Rutas de páginas
     {
       "src": "/",
       "dest": "/html/index.html"
@@ -54,7 +50,6 @@
       "src": "/crear_denuncia",
       "dest": "/html/crear_denuncia.html"
     },
-    // Catch-all
     {
       "src": "/(.*)",
       "dest": "/html/$1.html",
