@@ -1,26 +1,26 @@
 {
-  "github": {
-    "silent": true
-  },
-  "public": true,
-  "trailingSlash": false,
-  "redirects": [],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/css/:match*",
-      "destination": "/css/:match*"
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
     },
     {
-      "source": "/js/:match*", 
-      "destination": "/js/:match*"
+      "src": "/js/(.*)",
+      "dest": "/js/$1"
     },
     {
-      "source": "/assets/:match*",
-      "destination": "/assets/:match*"
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
     },
     {
-      "source": "/:path*",
-      "destination": "/html/:path*.html"
+      "src": "/",
+      "dest": "/html/index.html",
+      "status": 200
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/html/$1.html",
+      "status": 200
     }
   ]
 }
