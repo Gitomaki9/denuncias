@@ -1,8 +1,26 @@
 {
+  "github": {
+    "silent": true
+  },
+  "public": true,
+  "trailingSlash": false,
+  "redirects": [],
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/html/index.html"
+      "source": "/css/:match*",
+      "destination": "/css/:match*"
+    },
+    {
+      "source": "/js/:match*", 
+      "destination": "/js/:match*"
+    },
+    {
+      "source": "/assets/:match*",
+      "destination": "/assets/:match*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/html/:path*.html"
     }
   ]
 }
