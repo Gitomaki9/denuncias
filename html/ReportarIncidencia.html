@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reporte de Incidencia - Cusco Reporta</title>
+  
+  <!-- RUTAS CORREGIDAS para Netlify -->
+  <link rel="stylesheet" href="css/ReporteIncidencia.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  
+  <style>
+    /* Estilos adicionales si ReporteIncidencia.css no existe */
+    .reporte-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 30px;
+    }
+    
+    .form-section, .form-map {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 15px 0 8px;
+      color: #333;
+    }
+    
+    select, textarea, input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .file-upload {
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    .file-upload label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: #f8f9fa;
+      border: 2px dashed #8b0000;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .file-upload img {
+      width: 24px;
+      height: 24px;
+    }
+    
+    button#enviar {
+      background: #8b0000;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    
+    button#enviar:hover {
+      background: #a52a2a;
+    }
+    
+    .form-map img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    
+    /* Loading state */
+    .btn-loading {
+      position: relative;
+      color: transparent !important;
+    }
+    
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin-left: -10px;
+      margin-top: -10px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .reporte-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ======= BARRA SUPERIOR ======= -->
+  <div class="topbar">
+    <div class="topbar__logo">
+      <!-- RUTA CORREGIDA -->
+      <img src="assents/images/CuscoReporta.png" alt="Cusco Reporta" />
+    </div>
+    <div class="topbar__menu">
+      <a href="index.html">Inicio</a>
+      <a href="sobre_nosotros.html">Sobre nosotros</a>
+      <a href="ayuda.html">Contáctenos</a>
+      <a href="ayuda.html">Ayuda</a>
+    </div>
+  </div>
+
+  <!-- ======= CONTENEDOR PRINCIPAL ======= -->
+  <div class="container">
+    <!-- ======= SIDEBAR ======= -->
+    <aside class="sidebar">
+      <div class="sidebar__user">
+        <div class="sidebar__avatar">👤</div>
+        <div class="sidebar__info">
+          <h3 id="userName">Usuario</h3>
+          <p id="userRole">Ciudadano</p>
+        </div>
+      </div>
+
+      <ul class="sidebar__menu">
+        <li><a href="perfil_usuario.html">Ver perfil</a></li>
+        <li><a href="ReportarIncidencia.html" class="active">Reportar</a></li>
+        <li><a href="consultas.html">Estado de reportes</a></li>
+        <li><a href="MapaIncidiencias(Ciudadano).html">Mapa de incidencias</a></li>
+        <li><a href="notificaciones.html">Notificaciones</a></li>
+      </ul>
+
+      <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
+    </aside>
+
+    <!-- ======= CONTENIDO PRINCIPAL ======= -->
+    <main class="main-content">
+      <h1>REPORTE DE INCIDENCIA</h1>
+      <p style="color: #666; margin-bottom: 20px;">Reporta cualquier incidencia de tránsito en Cusco</p>
+
+      <div class="reporte-form">
+        <div class="form-section">
+          <form id="formReporte">
+            <label for="tipo">Tipo de incidencia *</label>
+            <select id="tipo" required>
+              <option value="">Seleccione incidencia</option>
+              <option value="Accidente">Accidente</option>
+              <option value="Bache o hueco">Bache o hueco</option>
+              <option value="Semáforo dañado">Semáforo dañado</option>
+              <option value="Alumbrado público">Alumbrado público</option>
+              <option value="Exceso de velocidad">Exceso de velocidad</option>
+              <option value="Mal estacionamiento">Mal estacionamiento</option>
+              <option value="Obstrucción de vía">Obstrucción de vía</option>
+              <option value="Otro">Otro</option>
+            </select>
+
+            <label for="descripcion">Descripción detallada *</label>
+            <textarea id="descripcion" placeholder="Describe la incidencia: ubicación exacta, hora, gravedad, etc." required></textarea>
+
+            <label for="ubicacion">Ubicación aproximada *</label>
+            <input type="text" id="ubicacion" placeholder="Ej: Av. El Sol frente al mercado San Pedro" required>
+
+            <div class="file-upload">
+              <label for="foto">
+                <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="icono cámara" />
+                Adjuntar fotos (opcional)
+              </label>
+              <input type="file" id="foto" accept="image/*" multiple />
+              <p style="font-size: 12px; color: #666; margin-top: 5px;">Puedes subir hasta 3 imágenes</p>
+            </div>
+
+            <button type="submit" id="enviar">
+              📤 Enviar Reporte
+            </button>
+          </form>
+        </div>
+
+        <div class="form-map">
+          <p><strong>📍 Mapa de referencia:</strong></p>
+          <img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/map-2024428_1280.png" alt="Mapa ubicación" />
+          <p style="font-size: 14px; color: #666; margin-top: 10px;">
+            <i class="fa-solid fa-info-circle"></i> En una versión futura, esto será un mapa interactivo donde podrás seleccionar la ubicación exacta.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Información adicional -->
+      <div style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+        <h3><i class="fa-solid fa-circle-info"></i> Información importante</h3>
+        <ul style="color: #555;">
+          <li>Tu reporte será revisado por las autoridades correspondientes</li>
+          <li>Procura ser lo más específico posible en la descripción</li>
+          <li>Las fotos ayudan a una mejor identificación del problema</li>
+          <li>Recibirás un número de seguimiento para consultar el estado</li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <!-- Cargar FontAwesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Cargar Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  
+  <script>
+    // ==================== CONFIGURACIÓN SUPABASE ====================
+    const SUPABASE_URL = 'https://grchvnewfkakaqfkgbzy.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_bQZ1guTH9D2ByDwgMYGLfQ_g7bIsktc';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // ================================================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. CARGAR DATOS DEL USUARIO
+      const userData = sessionStorage.getItem('user');
+      
+      if (!userData) {
+        alert('❌ Debes iniciar sesión para reportar incidencias.');
+        window.location.href = 'iniciar-sesion.html';
+        return;
+      }
+      
+      const user = JSON.parse(userData);
+      document.getElementById('userName').textContent = user.nombre || 'Usuario';
+      
+      // 2. CONFIGURAR LOGOUT
+      document.getElementById('logoutBtn').addEventListener('click', async function() {
+        if (confirm('¿Estás seguro de cerrar sesión?')) {
+          await supabase.auth.signOut();
+          sessionStorage.removeItem('user');
+          alert('✅ Sesión cerrada');
+          window.location.href = 'index.html';
+        }
+      });
+      
+      // 3. MANEJAR EL FORMULARIO
+      const form = document.getElementById('formReporte');
+      const btnEnviar = document.getElementById('enviar');
+      
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Validación básica
+        const tipo = document.getElementById('tipo').value;
+        const descripcion = document.getElementById('descripcion').value;
+        const ubicacion = document.getElementById('ubicacion').value;
+        
+        if (!tipo || !descripcion || !ubicacion) {
+          alert('Por favor completa todos los campos obligatorios (*)');
+          return;
+        }
+        
+        // Cambiar estado del botón
+        const textoOriginal = btnEnviar.innerHTML;
+        btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+        btnEnviar.disabled = true;
+        btnEnviar.classList.add('btn-loading');
+        
+        try {
+          // Preparar datos para Supabase
+          const reporteData = {
+            titulo: tipo,
+            descripcion: descripcion,
+            ubicacion: ubicacion,
+            categoria: 'Incidencia',
+            estado: 'pendiente',
+            tipo_incidencia: tipo,
+            usuario_nombre: user.nombre || user.email,
+            usuario_email: user.email,
+            fecha_reporte: new Date().toISOString(),
+            // Nota: No estamos subiendo imágenes todavía
+            // Para subir imágenes necesitarías Supabase Storage
+          };
+          
+          console.log('📤 Enviando reporte:', reporteData);
+          
+          // Opción A: Guardar en la misma tabla 'denuncias'
+          const { data, error } = await supabase
+            .from('denuncias')
+            .insert([reporteData])
+            .select();
+          
+          if (error) {
+            // Si falla, intentar con tabla 'reportes' si existe
+            console.log('Intentando con tabla reportes...');
+            const { data: data2, error: error2 } = await supabase
+              .from('reportes')
+              .insert([reporteData])
+              .select();
+            
+            if (error2) throw error2;
+            
+            mostrarExito(data2[0].id, 'reporte');
+          } else {
+            mostrarExito(data[0].id, 'denuncia');
+          }
+          
+          // Limpiar formulario
+          form.reset();
+          
+        } catch (error) {
+          console.error('❌ Error al enviar:', error);
+          
+          // Mensajes de error amigables
+          if (error.message.includes('network')) {
+            alert('❌ Error de conexión. Verifica tu internet.');
+          } else if (error.message.includes('permission')) {
+            alert('❌ Error de permisos. Contacta al administrador.');
+          } else {
+            alert(`❌ Error: ${error.message}\n\nUsa datos de prueba para la demo.`);
+          }
+          
+        } finally {
+          // Restaurar botón
+          btnEnviar.innerHTML = textoOriginal;
+          btnEnviar.disabled = false;
+          btnEnviar.classList.remove('btn-loading');
+        }
+      });
+      
+      // 4. PRE-CARGAR DATOS DE PRUEBA PARA DEMOSTRACIÓN
+      document.getElementById('descripcion').value = 'Bache profundo de aproximadamente 50cm de diámetro en la mitad de la calzada. Representa peligro para vehículos pequeños.';
+      document.getElementById('ubicacion').value = 'Av. El Sol, altura del km 5, frente al Colegio San Francisco';
+      
+      console.log('✅ Formulario de reporte listo');
+    });
+    
+    // Función para mostrar éxito
+    function mostrarExito(id, tipo) {
+      const mensaje = `✅ ¡${tipo === 'denuncia' ? 'Denuncia' : 'Reporte'} enviado con éxito!\n\n` +
+                     `Número de seguimiento: CR-${id}\n` +
+                     `Puedes ver el estado en "Estado de reportes".`;
+      
+      alert(mensaje);
+      
+      // Opcional: Redirigir después de 3 segundos
+      setTimeout(() => {
+        if (confirm('¿Quieres ver todas las incidencias reportadas?')) {
+          window.location.href = 'consultas.html';
+        }
+      }, 1000);
+    }
+    
+    // 5. MANEJO DE IMÁGENES (versión futura)
+    function manejarImagenes(archivos) {
+      console.log('📸 Imágenes seleccionadas:', archivos.length);
+      // Para subir a Supabase Storage necesitarías:
+      // 1. Configurar bucket en Supabase
+      // 2. Subir cada archivo con supabase.storage
+      // 3. Guardar las URLs en la base de datos
+      
+      alert(`📸 ${archivos.length} imagen(es) seleccionada(s)\n\nEn una versión completa, estas se subirían a la nube.`);
+    }
+    
+    // Escuchar cambios en el input de imágenes
+    document.getElementById('foto')?.addEventListener('change', function(e) {
+      if (this.files.length > 3) {
+        alert('Máximo 3 imágenes permitidas');
+        this.value = '';
+        return;
+      }
+      manejarImagenes(this.files);
+    });
+  </script>
+</body>
+</html>

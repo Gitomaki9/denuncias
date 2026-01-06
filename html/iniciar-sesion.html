@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar Sesión - Cusco Reporta</title>
+  
+  <!-- RUTAS CORREGIDAS para Netlify -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Estilos para los botones corregidos */
+    .auth-buttons {
+      display: flex;
+      margin: 30px auto;
+      justify-content: center;
+      gap: 0;
+      max-width: 400px;
+    }
+    
+    .auth-btn {
+      border: none;
+      padding: 12px 24px;
+      color: white;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      font-size: 16px;
+    }
+    
+    .auth-btn:hover {
+      filter: brightness(1.15);
+      transform: translateY(-2px);
+    }
+    
+    .auth-btn-login {
+      background-color: #b22222;
+      border-radius: 12px 0 0 12px;
+    }
+    
+    .auth-btn-register {
+      background-color: #c43d3d;
+      border-radius: 0 12px 12px 0;
+    }
+    
+    /* Estilos del formulario */
+    .login-form {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: #f8f9fa;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #b22222;
+      background-color: white;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #8b0000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+    
+    .submit-btn:hover {
+      background-color: #a52a2a;
+    }
+    
+    .confia {
+      text-align: center;
+      font-weight: 700;
+      color: #8b0000;
+      margin-top: 30px;
+      font-size: 18px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      .auth-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+      
+      .auth-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .auth-btn-login,
+      .auth-btn-register {
+        border-radius: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ======= HEADER ======= -->
+  <header class="navbar">
+    <div class="navbar__left">
+      <!-- RUTAS CORREGIDAS -->
+      <img src="assents/images/MTC.png" alt="Logo MTC" class="navbar__logo">
+      <img src="assents/images/CuscoReporta.png" alt="Logo Cusco Reporta" class="navbar__logo">
+    </div>
+
+    <nav class="navbar__menu">
+      <a href="index.html">Inicio</a>
+      <a href="registrar_Denuncia.html">Registra tu denuncia</a>
+      <a href="sobre_nosotros.html">Sobre nosotros</a>
+      <a href="iniciar-sesion.html">Iniciar Sesión</a>
+      <a href="ayuda.html">Ayuda</a>
+    </nav>
+  </header>
+
+  <!-- ======= CONTENIDO PRINCIPAL ======= -->
+  <main class="main">
+    <section class="denuncia" style="text-align: center; padding: 40px 20px;">
+      <h1 style="background-color: #8b0000; color: white; padding: 15px 30px; border-radius: 10px; display: inline-block; margin-bottom: 30px;">
+        INICIO DE SESIÓN
+      </h1>
+
+      <!-- FORMULARIO DE LOGIN (PRIMERO) -->
+      <div class="login-form">
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username" class="form-label">Nombre de Usuario o Email</label>
+            <input type="text" id="username" name="username" class="form-input" 
+                   placeholder="usuario@ejemplo.com" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" id="password" name="password" class="form-input" 
+                   placeholder="••••••••" required>
+          </div>
+          
+          <button type="submit" class="submit-btn">
+            🔐 Iniciar Sesión
+          </button>
+        </form>
+      </div>
+
+      <!-- BOTONES DE OPCIÓN (DESPUÉS DEL FORMULARIO) -->
+      <div style="margin: 40px 0;">
+        <p style="color: #666; margin-bottom: 15px; font-weight: 600;">
+          ¿No tienes una cuenta? Regístrate para reportar incidencias
+        </p>
+        
+        <div class="auth-buttons">
+          <!-- Este botón es solo visual (ya estamos en login) -->
+          <a href="iniciar-sesion.html" class="auth-btn auth-btn-login" 
+             style="opacity: 0.9; cursor: default;">
+            <span>👤</span> Iniciar Sesión
+          </a>
+          
+          <!-- Botón REGISTRARSE que SÍ funciona -->
+          <a href="registro_usuario.html" class="auth-btn auth-btn-register">
+            Registrarse <span>🏬</span>
+          </a>
+        </div>
+      </div>
+
+      <p class="confia">¡CONFÍA EN NOSOTROS!</p>
+      
+      <!-- Enlace adicional -->
+      <div style="margin-top: 20px;">
+        <a href="index.html" style="color: #8b0000; text-decoration: none; font-weight: 600;">
+          ← Volver al Inicio
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Cargar JavaScript -->
+  <script src="js/main.js"></script>
+  
+  <!-- Script específico para esta página -->
+ <!-- Cargar Supabase -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<script>
+  // Configurar Supabase
+  const SUPABASE_URL = 'https://grchvnewfkakaqfkgbzy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_bQZ1guTH9D2ByDwgMYGLfQ_g7bIsktc';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    
+    if (loginForm) {
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        if (!email || !password) {
+          alert('Por favor, completa ambos campos.');
+          return;
+        }
+        
+        // Mostrar cargando
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '🔐 Verificando...';
+        submitBtn.disabled = true;
+        
+        try {
+          // 1. INICIAR SESIÓN CON SUPABASE AUTH
+          const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+          
+          if (authError) {
+            // Si falla, intentar con usuario demo
+            if (email === 'demo@cusco.com' && password === '123456') {
+              console.log('✅ Usando cuenta demo');
+              // Crear sesión simulada para demo
+              sessionStorage.setItem('user', JSON.stringify({
+                id: 'demo-123',
+                email: 'demo@cusco.com',
+                nombre: 'Usuario Demo'
+              }));
+              alert('✅ ¡Bienvenido Usuario Demo! (modo demostración)');
+              window.location.href = 'panel.html';
+              return;
+            }
+            throw authError;
+          }
+          
+          console.log('✅ Login exitoso:', authData.user);
+          
+          // 2. OBTENER DATOS DEL USUARIO DESDE LA TABLA 'usuarios'
+          const { data: usuarioData, error: usuarioError } = await supabase
+            .from('usuarios')
+            .select('*')
+            .eq('email', email)
+            .single();
+          
+          // Guardar datos en sessionStorage
+          const userInfo = {
+            id: authData.user.id,
+            email: authData.user.email,
+            nombre: usuarioData?.nombre_completo || authData.user.email.split('@')[0],
+            dni: usuarioData?.dni || '',
+            rol: usuarioData?.rol || 'ciudadano'
+          };
+          
+          sessionStorage.setItem('user', JSON.stringify(userInfo));
+          
+          // 3. MOSTRAR BIENVENIDA PERSONALIZADA
+          alert(`✅ ¡Bienvenido ${userInfo.nombre}!`);
+          window.location.href = 'panel.html';
+          
+        } catch (error) {
+          console.error('❌ Error en login:', error);
+          
+          // Mensajes de error amigables
+          if (error.message.includes('Invalid login credentials')) {
+            alert('❌ Credenciales incorrectas. Usa:\nEmail: demo@cusco.com\nContraseña: 123456');
+          } else if (error.message.includes('Email not confirmed')) {
+            alert('❌ Confirma tu email primero');
+          } else {
+            alert(`❌ Error: ${error.message}`);
+          }
+          
+          // Restaurar botón
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+    }
+    
+    // Verificar si ya hay sesión activa
+    const user = sessionStorage.getItem('user');
+    if (user && window.location.pathname.includes('iniciar-sesion')) {
+      const userObj = JSON.parse(user);
+      if (confirm(`Ya hay una sesión activa como ${userObj.nombre}. ¿Ir al panel?`)) {
+        window.location.href = 'panel.html';
+      }
+    }
+  });
+</script>
+</body>
+</html>

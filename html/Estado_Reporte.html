@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estado de Reportes - Cusco Reporta</title>
+  
+  <!-- RUTAS CORREGIDAS para Netlify -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    /* Estilos específicos para la tabla */
+    .reportes-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .filtros {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .filtros select, .filtros input {
+      padding: 10px 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    
+    .tabla-reportes {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .tabla-reportes th {
+      background: #8b0000;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+    
+    .tabla-reportes td {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .tabla-reportes tr:hover {
+      background: #f8f9fa;
+    }
+    
+    /* Badges para estados */
+    .badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .badge-pendiente {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .badge-proceso {
+      background: #cce5ff;
+      color: #004085;
+      border: 1px solid #b8daff;
+    }
+    
+    .badge-resuelto {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    /* Badges para tipo de formulario */
+    .badge-denuncia {
+      background: #8b0000;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    
+    .badge-reporte {
+      background: #0066cc;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #8b0000;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .tabla-reportes {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      .filtros {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ====== NAVBAR SUPERIOR ====== -->
+  <header class="topbar">
+    <div class="topbar__logo">
+      <img src="assents/images/CuscoReporta.png" alt="Cusco Reporta Logo">
+    </div>
+    <nav class="topbar__menu">
+      <a href="index.html">Inicio</a>
+      <a href="panel.html">Panel</a>
+      <a href="registrar_Denuncia.html">Nueva Denuncia</a>
+      <a href="Estado_Reporte.html" class="active">Estado de Reportes</a>
+      <a href="ayuda.html">Ayuda</a>
+    </nav>
+  </header>
+
+  <!-- ====== CONTENIDO PRINCIPAL ====== -->
+  <div class="container">
+    <!-- ====== SIDEBAR (opcional, si usas la misma estructura) ====== -->
+    <aside class="sidebar" style="display:flex; flex-direction:column; justify-content:flex-start;">
+      <div class="sidebar__user" style="margin-bottom:10px;">
+        <div class="sidebar__avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="sidebar__info">
+          <h3 id="userName">Cargando...</h3>
+          <p id="userRole">Ciudadano</p>
+        </div>
+      </div>
+
+      <ul class="sidebar__menu" style="margin-top:0; padding-top:0; list-style:none;">
+        <li><a href="panel.html"><i class="fa-solid fa-home"></i> Panel Principal</a></li>
+        <li><a href="registrar_Denuncia.html"><i class="fa-solid fa-triangle-exclamation"></i> Nueva Denuncia</a></li>
+        <li><a href="ReportarIncidencia.html"><i class="fa-solid fa-pen-to-square"></i> Reporte Rápido</a></li>
+        <li><a href="Estado_Reporte.html" class="active"><i class="fa-solid fa-list-check"></i> Estado de Reportes</a></li>
+        <li><a href="consultas.html"><i class="fa-solid fa-database"></i> Todas las Denuncias</a></li>
+      </ul>
+
+      <button class="logout-btn" id="logoutBtn" style="margin-top:auto;">
+        <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+      </button>
+    </aside>
+
+    <!-- ====== CONTENIDO PRINCIPAL ====== -->
+    <main class="main-content">
+      <div class="reportes-container">
+        <h1><i class="fa-solid fa-list-check"></i> Estado de Reportes</h1>
+        <p style="color:#666; margin-bottom:20px;">
+          Consulta el estado de tus denuncias y reportes enviados.
+        </p>
+        
+        <!-- Filtros -->
+        <div class="filtros">
+          <select id="filtroEstado">
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendientes</option>
+            <option value="en proceso">En proceso</option>
+            <option value="resuelto">Resueltos</option>
+          </select>
+          
+          <select id="filtroTipo">
+            <option value="">Todos los tipos</option>
+            <option value="denuncia">Denuncias</option>
+            <option value="reporte">Reportes</option>
+          </select>
+          
+          <input type="text" id="filtroBusqueda" placeholder="Buscar por título o ubicación...">
+          
+          <button id="btnFiltrar" style="background:#8b0000; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">
+            <i class="fa-solid fa-filter"></i> Filtrar
+          </button>
+          
+          <button id="btnRecargar" style="background:#28a745; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">
+            <i class="fa-solid fa-rotate"></i> Recargar
+          </button>
+        </div>
+        
+        <!-- Contador de resultados -->
+        <div id="contador" style="margin:10px 0; color:#666; font-weight:600;">
+          Cargando reportes...
+        </div>
+        
+        <!-- Tabla de reportes -->
+        <div id="tablaContenedor">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Cargando reportes desde la base de datos...</p>
+          </div>
+        </div>
+        
+        <!-- Mensaje si no hay resultados -->
+        <div id="sinResultados" style="display:none; text-align:center; padding:40px; color:#666;">
+          <i class="fa-solid fa-inbox" style="font-size:48px; margin-bottom:20px;"></i>
+          <h3>No hay reportes registrados</h3>
+          <p>Cuando envíes denuncias o reportes, aparecerán aquí.</p>
+          <a href="registrar_Denuncia.html" style="display:inline-block; margin-top:20px; background:#8b0000; color:white; padding:10px 20px; border-radius:8px; text-decoration:none;">
+            <i class="fa-solid fa-plus"></i> Crear primera denuncia
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ====== SCRIPTS ====== -->
+  <!-- Cargar Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  
+  <!-- Error Handler (si lo tienes) -->
+  <script src="js/errorHandler.js"></script>
+  
+  <script>
+    // Configurar Supabase
+    const SUPABASE_URL = 'https://grchvnewfkakaqfkgbzy.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_bQZ1guTH9D2ByDwgMYGLfQ_g7bIsktc';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // Variables globales
+    let todosLosReportes = [];
+    let usuarioActual = null;
+    
+    document.addEventListener('DOMContentLoaded', async function() {
+      // 1. CARGAR USUARIO DE SESIÓN
+      const userData = sessionStorage.getItem('user');
+      
+      if (!userData) {
+        alert('❌ Debes iniciar sesión para ver tus reportes.');
+        window.location.href = 'iniciar-sesion.html';
+        return;
+      }
+      
+      usuarioActual = JSON.parse(userData);
+      document.getElementById('userName').textContent = usuarioActual.nombre || 'Usuario';
+      
+      // 2. CONFIGURAR LOGOUT (tu código actual)
+      document.getElementById("logoutBtn").addEventListener("click", async function() {
+        if (confirm("¿Estás seguro de cerrar sesión?")) {
+          try {
+            await supabase.auth.signOut();
+            if (window.errorHandler) {
+              window.errorHandler.registrar('sesion', null, { accion: 'logout_exitoso' });
+            }
+          } catch (error) {
+            if (window.errorHandler) {
+              window.errorHandler.registrar('sesion', error, { accion: 'logout_error' });
+            }
+          }
+          
+          sessionStorage.removeItem('user');
+          
+          if (window.errorHandler) {
+            window.errorHandler.mostrarUsuario(
+              { message: 'Sesión cerrada correctamente' }, 
+              'success'
+            );
+          } else {
+            alert('✅ Sesión cerrada correctamente');
+          }
+          
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
+        }
+      });
+      
+      // 3. CARGAR REPORTES DESDE SUPABASE
+      await cargarReportes();
+      
+      // 4. CONFIGURAR FILTROS
+      configurarFiltros();
+      
+      console.log('✅ Estado_Reporte.html cargado correctamente');
+    });
+    
+    // ==================== FUNCIÓN PRINCIPAL ====================
+    async function cargarReportes() {
+      try {
+        mostrarCargando(true);
+        
+        console.log('🔄 Cargando reportes de Supabase...');
+        
+        // Obtener TODAS las denuncias/reportes
+        const { data, error } = await supabase
+          .from('denuncias')
+          .select('*')
+          .order('creado_en', { ascending: false });
+        
+        if (error) {
+          throw new Error(`Error de Supabase: ${error.message}`);
+        }
+        
+        console.log(`✅ ${data.length} reportes cargados`);
+        
+        todosLosReportes = data;
+        
+        // Filtrar por usuario actual (si es ciudadano, no admin)
+        // Puedes cambiar esto según tu lógica
+        const reportesFiltrados = filtrarPorUsuario(data, usuarioActual);
+        
+        // Mostrar en tabla
+        mostrarReportes(reportesFiltrados);
+        mostrarContador(reportesFiltrados.length, data.length);
+        
+        // Ocultar loading
+        mostrarCargando(false);
+        
+      } catch (error) {
+        console.error('❌ Error cargando reportes:', error);
+        
+        // Mostrar error
+        document.getElementById('tablaContenedor').innerHTML = `
+          <div style="text-align:center; padding:40px; color:#dc3545;">
+            <i class="fa-solid fa-exclamation-triangle" style="font-size:48px;"></i>
+            <h3>Error al cargar los reportes</h3>
+            <p>${error.message}</p>
+            <button onclick="cargarReportes()" style="margin-top:20px; background:#8b0000; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">
+              <i class="fa-solid fa-rotate"></i> Reintentar
+            </button>
+          </div>
+        `;
+        
+        mostrarCargando(false);
+      }
+    }
+    
+    // Filtrar por usuario (si no es admin)
+    function filtrarPorUsuario(reportes, usuario) {
+      // Si el usuario es admin o tiene rol especial, mostrar todos
+      if (usuario.rol === 'admin' || usuario.email === 'admin@cusco.com') {
+        return reportes;
+      }
+      
+      // Si no, filtrar por su email o user_id
+      return reportes.filter(reporte => {
+        return reporte.usuario_email === usuario.email || 
+               reporte.user_id === usuario.id;
+      });
+    }
+    
+    // Mostrar reportes en tabla
+    function mostrarReportes(reportes) {
+      if (reportes.length === 0) {
+        document.getElementById('sinResultados').style.display = 'block';
+        document.getElementById('tablaContenedor').innerHTML = '';
+        return;
+      }
+      
+      document.getElementById('sinResultados').style.display = 'none';
+      
+      const tablaHTML = `
+        <table class="tabla-reportes">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título / Tipo</th>
+              <th>Estado</th>
+              <th>Ubicación</th>
+              <th>Fecha</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${reportes.map(reporte => `
+              <tr>
+                <td><strong>#${reporte.id}</strong></td>
+                <td>
+                  ${reporte.titulo}
+                  <span class="badge-${reporte.tipo_formulario || 'denuncia'}">
+                    ${reporte.tipo_formulario === 'reporte' ? '📋 Reporte' : '⚖️ Denuncia'}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge badge-${getClaseEstado(reporte.estado)}">
+                    ${reporte.estado || 'pendiente'}
+                  </span>
+                </td>
+                <td>${reporte.ubicacion || 'No especificada'}</td>
+                <td>${formatearFecha(reporte.creado_en)}</td>
+                <td>
+                  <button onclick="verDetalle(${reporte.id})" class="btn-accion" title="Ver detalles">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                  <button onclick="cambiarEstado(${reporte.id})" class="btn-accion" title="Cambiar estado">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      
+      document.getElementById('tablaContenedor').innerHTML = tablaHTML;
+    }
+    
+    // Configurar filtros
+    function configurarFiltros() {
+      document.getElementById('btnFiltrar').addEventListener('click', aplicarFiltros);
+      document.getElementById('btnRecargar').addEventListener('click', cargarReportes);
+      
+      // Aplicar filtros al cambiar opciones
+      document.getElementById('filtroEstado').addEventListener('change', aplicarFiltros);
+      document.getElementById('filtroTipo').addEventListener('change', aplicarFiltros);
+      document.getElementById('filtroBusqueda').addEventListener('input', aplicarFiltros);
+    }
+    
+    // Aplicar filtros
+    function aplicarFiltros() {
+      const estado = document.getElementById('filtroEstado').value;
+      const tipo = document.getElementById('filtroTipo').value;
+      const busqueda = document.getElementById('filtroBusqueda').value.toLowerCase();
+      
+      let filtrados = todosLosReportes;
+      
+      // Filtrar por usuario primero
+      filtrados = filtrarPorUsuario(filtrados, usuarioActual);
+      
+      // Aplicar filtro de estado
+      if (estado) {
+        filtrados = filtrados.filter(r => r.estado === estado);
+      }
+      
+      // Aplicar filtro de tipo
+      if (tipo) {
+        filtrados = filtrados.filter(r => r.tipo_formulario === tipo);
+      }
+      
+      // Aplicar búsqueda
+      if (busqueda) {
+        filtrados = filtrados.filter(r => 
+          (r.titulo && r.titulo.toLowerCase().includes(busqueda)) ||
+          (r.ubicacion && r.ubicacion.toLowerCase().includes(busqueda)) ||
+          (r.descripcion && r.descripcion.toLowerCase().includes(busqueda))
+        );
+      }
+      
+      // Mostrar resultados
+      mostrarReportes(filtrados);
+      mostrarContador(filtrados.length, todosLosReportes.length);
+    }
+    
+    // Funciones auxiliares
+    function mostrarCargando(mostrar) {
+      if (mostrar) {
+        document.getElementById('tablaContenedor').innerHTML = `
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Cargando reportes desde la base de datos...</p>
+          </div>
+        `;
+      }
+    }
+    
+    function mostrarContador(filtrados, total) {
+      document.getElementById('contador').innerHTML = `
+        Mostrando <strong>${filtrados}</strong> de <strong>${total}</strong> reportes
+        ${filtrados !== total ? '(filtrados)' : ''}
+      `;
+    }
+    
+    function getClaseEstado(estado) {
+      if (!estado) return 'pendiente';
+      if (estado.includes('pendiente')) return 'pendiente';
+      if (estado.includes('proceso')) return 'proceso';
+      if (estado.includes('resuelto')) return 'resuelto';
+      return 'pendiente';
+    }
+    
+    function formatearFecha(fechaString) {
+      if (!fechaString) return 'No registrada';
+      const fecha = new Date(fechaString);
+      return fecha.toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    
+    // Funciones de acción (puedes implementarlas)
+    function verDetalle(id) {
+      alert(`Ver detalle del reporte #${id}\n\nEn una versión completa, esto abriría un modal con todos los detalles.`);
+      // window.location.href = `detalle_reporte.html?id=${id}`;
+    }
+    
+    async function cambiarEstado(id) {
+      const nuevoEstado = prompt('Ingresa nuevo estado (pendiente, en proceso, resuelto):', 'en proceso');
+      
+      if (nuevoEstado && ['pendiente', 'en proceso', 'resuelto'].includes(nuevoEstado)) {
+        try {
+          const { error } = await supabase
+            .from('denuncias')
+            .update({ estado: nuevoEstado })
+            .eq('id', id);
+          
+          if (error) throw error;
+          
+          alert(`✅ Estado actualizado a: ${nuevoEstado}`);
+          await cargarReportes(); // Recargar
+        } catch (error) {
+          alert(`❌ Error: ${error.message}`);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
