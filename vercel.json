@@ -1,58 +1,63 @@
 {
-  "trailingSlash": false,
-  "cleanUrls": true,
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/assets/([^/]+\.(svg|png|jpg|jpeg|gif))",
-      "destination": "/assets/$1"
+      "src": "html/*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/assets/([^/]+\.(svg|png|jpg|jpeg|gif))",
+      "dest": "/assets/$1"
     },
     {
-      "source": "/assets/images/(.*)",
-      "destination": "/assets/images/$1"
+      "src": "/assets/images/(.*)",
+      "dest": "/assets/images/$1"
     },
     {
-      "source": "/css/(.*)",
-      "destination": "/css/$1"
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
     },
     {
-      "source": "/js/(.*)",
-      "destination": "/js/$1"
+      "src": "/js/(.*)",
+      "dest": "/js/$1"
     },
     {
-      "source": "/",
-      "destination": "/html/index.html"
+      "src": "/",
+      "dest": "/html/index.html"
     },
     {
-      "source": "/login",
-      "destination": "/html/login.html"
+      "src": "/login",
+      "dest": "/html/login.html"
     },
     {
-      "source": "/registro",
-      "destination": "/html/registro.html"
+      "src": "/registro",
+      "dest": "/html/registro.html"
     },
     {
-      "source": "/contactanos",
-      "destination": "/html/contactanos.html"
+      "src": "/contactanos",
+      "dest": "/html/contactanos.html"
     },
     {
-      "source": "/normativa",
-      "destination": "/html/normativa.html"
+      "src": "/normativa",
+      "dest": "/html/normativa.html"
     },
     {
-      "source": "/perfil",
-      "destination": "/html/perfil.html"
+      "src": "/perfil",
+      "dest": "/html/perfil.html"
     },
     {
-      "source": "/denuncias",
-      "destination": "/html/denuncias.html"
+      "src": "/denuncias",
+      "dest": "/html/denuncias.html"
     },
     {
-      "source": "/crear_denuncia",
-      "destination": "/html/crear_denuncia.html"
+      "src": "/crear_denuncia",
+      "dest": "/html/crear_denuncia.html"
     },
     {
-      "source": "/(.*)",
-      "destination": "/html/$1.html"
+      "src": "/(.*)",
+      "dest": "/html/$1.html"
     }
   ]
 }
