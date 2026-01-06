@@ -1,8 +1,11 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [],
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/html/$1.html"
+      "src": "/(.*)",
+      "dest": "/html/index.html",
+      "status": 200
     }
   ]
 }
